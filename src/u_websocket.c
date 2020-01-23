@@ -265,9 +265,9 @@ static int ulfius_send_websocket_message_managed(struct _websocket_manager * web
     } else {
       message = ulfius_build_message(opcode, (websocket_manager->type == U_WEBSOCKET_CLIENT), data, data_len);
       if (message != NULL) {
-        if (ulfius_push_websocket_message(websocket_manager->message_list_outcoming, message) != U_OK) {
-          y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error pushing new websocket message in list");
-        }
+        //if (ulfius_push_websocket_message(websocket_manager->message_list_outcoming, message) != U_OK) {
+        //  y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error pushing new websocket message in list");
+        //}
         while (offset < data_len) {
           cur_len = fragment_len<(data_len - offset)?fragment_len:(data_len - offset);
           if ((ret = ulfius_build_frame(message, offset, cur_len, &frame, &frame_len)) != U_OK) {
@@ -281,6 +281,7 @@ static int ulfius_send_websocket_message_managed(struct _websocket_manager * web
             frame_len = 0;
           }
         }
+        ulfius_clear_websocket_message(message);
       } else {
         y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error ulfius_build_message");
         ret = U_ERROR;
@@ -481,10 +482,10 @@ void * ulfius_thread_websocket(void * data) {
               if (websocket->websocket_incoming_message_callback != NULL) {
                 websocket->websocket_incoming_message_callback(websocket->request, websocket->websocket_manager, message, websocket->websocket_incoming_user_data);
               }
-              if (ulfius_push_websocket_message(websocket->websocket_manager->message_list_incoming, message) != U_OK) {
-                y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error pushing new websocket message in list");
-                websocket->websocket_manager->connected = 0;
-              }
+              //if (ulfius_push_websocket_message(websocket->websocket_manager->message_list_incoming, message) != U_OK) {
+              //  y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error pushing new websocket message in list");
+              //  websocket->websocket_manager->connected = 0;
+              //}
             } else {
               y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error ulfius_read_incoming_message");
               websocket->websocket_manager->connected = 0;
@@ -1107,9 +1108,9 @@ int ulfius_websocket_send_fragmented_message(struct _websocket_manager * websock
               if (message->opcode == U_WEBSOCKET_OPCODE_CLOSE) {
                 websocket_manager->connected = 0;
               }
-              if (ulfius_push_websocket_message(websocket_manager->message_list_incoming, message) != U_OK) {
-                y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error pushing new websocket message in list");
-              }
+              //if (ulfius_push_websocket_message(websocket_manager->message_list_incoming, message) != U_OK) {
+              //  y_log_message(Y_LOG_LEVEL_ERROR, "Ulfius - Error pushing new websocket message in list");
+              //}
             } else {
               websocket_manager->connected = 0;
             }
