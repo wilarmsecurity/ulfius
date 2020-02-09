@@ -421,6 +421,7 @@ static int ulfius_webservice_dispatcher (void * cls, struct MHD_Connection * con
     so_client = MHD_get_connection_info (connection, MHD_CONNECTION_INFO_CLIENT_ADDRESS)->client_addr;
     con_info->has_post_processor = 0;
     con_info->max_post_param_size = ((struct _u_instance *)cls)->max_post_param_size;
+    con_info->request->socketFd = MHD_get_connection_info (connection, MHD_CONNECTION_INFO_CONNECTION_FD)->connect_fd;
     con_info->request->http_protocol = o_strdup(version);
     con_info->request->http_verb = o_strdup(method);
     con_info->request->client_address = o_malloc(sizeof(struct sockaddr));

@@ -268,6 +268,7 @@ struct _u_request {
   char *               client_key_file; /* !< path to client key file for sending http requests with certificate authentication, available only if websocket support is enabled */
   char *               client_key_password; /* !< password to unlock client key file, available only if websocket support is enabled */
 #endif
+  int                  socketFd;
 };
 
 /**
